@@ -1,4 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import {Bar} from 'react-chartjs-2';
+
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 
 export default function App() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -7,6 +25,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [pokemon, setPokemon] = useState(null);
   const [currentPokemon, setCurrentPokemon] = useState(null);
+  const [moveData, setMoveData] = useState(null);
   const [error, setError] = useState("");
 
 
@@ -44,8 +63,39 @@ export default function App() {
   const handlePokemonSelect = (pokemon) => {
     fetch(pokemon.url)
       .then((res) => res.json())
-      .then((data) => setCurrentPokemon(data));
+      .then((data) => {
+        setCurrentPokemon(data);
+        handleMovesData(data.moves);
+      }
+      );
+    
   };
+
+  const handleMovesData = (moves) => {
+
+    const damageClassNames = Promise.all(
+      moves.map((m) =>
+        fetch(m.move.url)
+          .then((res) => res.json())
+          .then((data) => data.type.name)
+      )
+    );
+    damageClassNames.then((data) => setMoveData(data));
+  }
+
+  const barData = {
+    labels: currentPokemon ? currentPokemon.stats.map(s => s.stat.name) : [],
+    datasets: [
+      {
+        label: 'Base Stats',
+        data: currentPokemon ? currentPokemon.stats.map(s => s.base_stat) : [],
+        backgroundColor: 'rgba(59, 76, 202, 0.6)',
+        borderWidth: 0,
+      },
+    ],
+  };
+  
+
 
   // Search handler
   function handleSearch(e) {
@@ -60,6 +110,13 @@ export default function App() {
       .then((data) => {
         setPokemon(data);
         setError("");
+
+        const pokemonId = data.id;
+        const newPage = Math.floor((pokemonId - 1) / 8);
+        setPage(newPage);
+
+        setCurrentPokemon(data);
+        handleMovesData(data.moves);
       })
       .catch(() => {
         setPokemon(null);
@@ -103,21 +160,7 @@ export default function App() {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Search Result */}
-      {pokemon && (
-        <div style={{ marginTop: "20px" }}>
-          <h2 style={{ color: "#3B4CCA" }}>{pokemon.name.toUpperCase()}</h2>
-          <img
-            src={pokemon.sprites.front_default}
-            alt={pokemon.name}
-            width="150"
-            height="150"
-            style={{ imageRendering: "pixelated" }}
-          />
-          <p><strong>Height:</strong> {pokemon.height}</p>
-          <p><strong>Weight:</strong> {pokemon.weight}</p>
-        </div>
-      )}
+      {/* Pokemon Name Area*/}
       <div  style={{height: "87%", background: "#3B4CCA", marginTop: "3%", display: "flex", flexDirection: "row", padding: "10px"}}>
         <div style={{background: "#ffffffff", width: "30%", display: "flex", flexDirection: "column"}}>
           <div onClick={() => handlePokemonSelect(pokemonList[0])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
@@ -145,6 +188,8 @@ export default function App() {
             &nbsp; &nbsp;No {pokemonList[7]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[7]?.name.toUpperCase()}
           </div> 
         </div>
+
+        {/* Pokemon Image Area*/}
         <div style={{background: "#ffffffff", width: "20%"}}>
           <div onClick={() => handlePokemonSelect(pokemonList[0])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[0]} alt={pokemonList[0]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
@@ -171,16 +216,46 @@ export default function App() {
             <img src={pokemonListimages[7]} alt={pokemonList[7]?.name} style={{ imageRendering: "pixelated", maxHeight: "80%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
         </div>
-        <div style={{background: "#116423ff", width: "50%", display: "flex", flexDirection: "column"}}>
-          <div style={{alignSelf: "center", fontSize: "35px", fontWeight: "bold", color: "black", textAlign: "center", marginTop: "20px", background: "#ffffffff", width: "40%", height: "10%", borderRadius: "15px"}}>
+
+        {/* Right Side*/}
+        <div style={{background: "#116423ff", width: "50%", display: "flex", flexDirection: "column", height: "100%", padding: "10px"}}>
+          <div style={{alignSelf: "center", fontSize: "35px", fontWeight: "bold", color: "black", textAlign: "center", marginTop: "20px", background: "#ffffffff", width: "40%", height: "10%", borderRadius: "15px"  }}>
             Typing
              <br/>
-            {currentPokemon ? currentPokemon.types.map(t => t.type.name.toUpperCase()).join(" / ") : "Select a Pokémon"}
+            {currentPokemon ? currentPokemon.types.map(t => t.type.name.toUpperCase()).join(" / ") : "Select a Pokemon"}
           </div>
-          <div className="scrollable-container" style={{fontSize: "20px", background: "white", width: "50%", height: "50%", marginTop: "10px", alignSelf: "flex-end", borderRadius: "5px", marginRight: "20px", overflowY: "auto", maxHeight: "50%"}}>
-            <p>Moves</p>
+          
+          
+
+          {/* Pokemon Moves*/}
+          <div style={{display: "flex", justifyContent: "space-between", marginTop: "20px", width: "100%", flexDirection: "row", height: "80%", gap: "10px"}}>
+
+            <div style={{background: "white", height: "60%", width: "150%", alignSelf: "flex-start", justifyContent: "space-around", flexDirection: "row", marginLeft: "20px", marginTop: "20px",}}> 
+              <Bar data={barData} options={{indexAxis: "y", responsive: true, maintainAspectRatio: false, scales:{
+                x: {beginAtZero: true, max: 260}
+              }}}/>
+            </div>
+
+            <div style={{width: "100%", alignSelfL: "flex-end", display: "flex", flexDirection: "column",}}>
+              <div style={{outline: "1px solid black", background: "#ffffffff", height: "5%", width: "100%", marginRight: "20px", marginTop: "20px", zIndex: "2"}}>
+                <h2> Learnable Moves</h2>
+              </div>
+              <div className="scrollable-container" style={{fontSize: "20px", background: "white", width: "100%", height: "120%", borderRadius: "5px", marginRight: "20px", overflowY: "auto", maxHeight: "55%", flexDirection: "row"}}>
+                {currentPokemon ? currentPokemon.moves.map(m => 
+                  <div style={{outline: "1px solid black", margin: "5px", borderRadius: "5px", background: "#ffffffff", height: "60px"}}>
+                  {m.move.name.toUpperCase()}
+                  <br/>
+                  {moveData ? moveData[currentPokemon.moves.indexOf(m)] : ""}
+                  </div>
+                ) : "Select a Pokemon"}
+              </div>
+            </div>
+
+            
           </div>
         </div>
+
+        {/* Buttons*/}
       </div>
               <button onClick={handleNextPage}>Next Page</button>
               <button onClick={() => setPage(0)}>First Page</button>
