@@ -6,6 +6,7 @@ export default function App() {
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
   const [pokemon, setPokemon] = useState(null);
+  const [currentPokemon, setCurrentPokemon] = useState(null);
   const [error, setError] = useState("");
 
 
@@ -33,6 +34,17 @@ export default function App() {
 
   const handleNextPage = () => {
     setPage(page+1);
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  }
+  const handlePokemonSelect = (pokemon) => {
+    fetch(pokemon.url)
+      .then((res) => res.json())
+      .then((data) => setCurrentPokemon(data));
   };
 
   // Search handler
@@ -108,65 +120,71 @@ export default function App() {
       )}
       <div  style={{height: "87%", background: "#3B4CCA", marginTop: "3%", display: "flex", flexDirection: "row", padding: "10px"}}>
         <div style={{background: "#ffffffff", width: "30%", display: "flex", flexDirection: "column"}}>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[0])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
              &nbsp; &nbsp;No {pokemonList[0]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[0]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e7ea34ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[1])} style ={{cursor: "pointer", height: "12.5%", background: "#e7ea34ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[1]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[1]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e7ea34ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={()  => handlePokemonSelect(pokemonList[2])} style ={{cursor: "pointer", height: "12.5%", background: "#e7ea34ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[2]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[2]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[3])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[3]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[3]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[4])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[4]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[4]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[5])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[5]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[5]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[6])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[6]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[6]?.name.toUpperCase()}
           </div>
-          <div style ={{height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[7])} style ={{cursor: "pointer", height: "12.5%", background: "#e6e932ff", outline: "2.5px solid black", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px"}}>
             &nbsp; &nbsp;No {pokemonList[7]?.url.split("/").at(-2)}  &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; {pokemonList[7]?.name.toUpperCase()}
           </div> 
         </div>
         <div style={{background: "#ffffffff", width: "20%"}}>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[0])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[0]} alt={pokemonList[0]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[1])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[1]} alt={pokemonList[1]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[2])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[2]} alt={pokemonList[2]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[3])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[3]} alt={pokemonList[3]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[4])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[4]} alt={pokemonList[4]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[5])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[5]} alt={pokemonList[5]?.name} style={{ imageRendering: "pixelated", maxHeight: "80%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[6])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[6]} alt={pokemonList[6]?.name} style={{ imageRendering: "pixelated", maxHeight: "100%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
-          <div style ={{height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
+          <div onClick={() => handlePokemonSelect(pokemonList[7])} style ={{cursor: "pointer", height: "12.5%", background: "#d6d3d3ff", textAlign: "center", alignItems: "center", display: "flex", fontSize: "40px", justifyContent: "center"}}>
             <img src={pokemonListimages[7]} alt={pokemonList[7]?.name} style={{ imageRendering: "pixelated", maxHeight: "80%", width: "auto", transform: "scale(1.7)"}}/>
           </div>
         </div>
-        <div style={{background: "#116423ff", width: "50%", display: "flex", flexDirection: "column", alignItems: "center"}}>
-          <div style={{fontSize: "50px", fontWeight: "bold", color: "white", textAlign: "center", marginTop: "20px", background: "#ffffffff", width: "40%", height: "10%", borderRadius: "15px"}}>
-            
-            
+        <div style={{background: "#116423ff", width: "50%", display: "flex", flexDirection: "column"}}>
+          <div style={{alignSelf: "center", fontSize: "35px", fontWeight: "bold", color: "black", textAlign: "center", marginTop: "20px", background: "#ffffffff", width: "40%", height: "10%", borderRadius: "15px"}}>
+            Typing
+             <br/>
+            {currentPokemon ? currentPokemon.types.map(t => t.type.name.toUpperCase()).join(" / ") : "Select a Pokémon"}
+          </div>
+          <div className="scrollable-container" style={{fontSize: "20px", background: "white", width: "50%", height: "50%", marginTop: "10px", alignSelf: "flex-end", borderRadius: "5px", marginRight: "20px", overflowY: "auto", maxHeight: "50%"}}>
+            <p>Moves</p>
           </div>
         </div>
       </div>
               <button onClick={handleNextPage}>Next Page</button>
+              <button onClick={() => setPage(0)}>First Page</button>
+              <button onClick={handlePreviousPage}>Previous Page</button>
     </div>
   );
 }
