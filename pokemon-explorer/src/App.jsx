@@ -95,7 +95,25 @@ export default function App() {
     ],
   };
   
+  const navButtonStyle = {
+    padding: "12px 26px",
+    fontSize: "18px",
+    fontWeight: 600,
+    borderRadius: "999px",
+    border: "none",
+    background: "#ffcb05",
+    color: "#2a75bb",
+    cursor: "pointer",
+    boxShadow: "0 4px 0 #b88900",
+    minWidth: "150px"
+  };
 
+  const disabledNavButtonStyle = {
+    ...navButtonStyle,
+    opacity: 0.5,
+    cursor: "not-allowed",
+    boxShadow: "none"
+  };
 
   // Search handler
   function handleSearch(e) {
@@ -257,9 +275,29 @@ export default function App() {
 
         {/* Buttons*/}
       </div>
-              <button onClick={handleNextPage}>Next Page</button>
-              <button onClick={() => setPage(0)}>First Page</button>
-              <button onClick={handlePreviousPage}>Previous Page</button>
+      <div style={{ marginTop: "8px", paddingBottom: "16px", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "18px" }}>
+          <button
+            onClick={handlePreviousPage}
+            disabled={page === 0}
+            style={page === 0 ? disabledNavButtonStyle : navButtonStyle}
+          >
+            ◀ Previous Page
+          </button>
+          <button
+            onClick={() => setPage(0)}
+            style={navButtonStyle}
+          >
+            First Page
+          </button>
+          <button
+            onClick={handleNextPage}
+            style={navButtonStyle}
+          >
+            Next Page ▶
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
