@@ -297,6 +297,9 @@ export default function App() {
             Next Page ▶
           </button>
         </div>
+        <div style={{ marginTop: "4px", fontSize: "18px", fontWeight: 600, color: "#3B4CCA" }}>
+          Page {page + 1}
+        </div>
       </div>
     </div>
   );
